@@ -122,3 +122,12 @@ macro_rules! command {
     }
   };
 }
+
+
+#[macro_export]
+macro_rules! url {
+  ($template:expr=> $lang:expr)=> {
+    format!("https://github.com/proton-xd-templates/{}-template-{}",$template,$lang).into_boxed_str()
+  };
+}
+

@@ -25,7 +25,9 @@ pub struct New {
   #[arg(long)]
   ts: Option<bool>,
   #[arg(long)]
-  js: Option<bool>
+  js: Option<bool>,
+  #[arg(long="cd")]
+  change_dir: Option<bool>
 }
 
 
@@ -36,11 +38,16 @@ impl Operation for New {
     ensure_fresh_dir(path).await?;
 
 
-    let url=url(&ensure_template(self.template),ensure_lang(self.js));
+    let url=url!(&ensure_template(self.template)=> ensure_lang(self.js));
     clone_repo(&url,path).await?;
 
 
-    Config::new(path.file_name().unwrap().to_str().unwrap()).save(CONFIG_FILE_NAME).await
+    Config::new(
+      path.file_name()
+      .unwrap()
+      .to_str()
+      .unwrap()
+    ).save(CONFIG_FILE_NAME).await
   }
 }
 
@@ -49,9 +56,15 @@ impl New {
     match &self.path {
       Some(path)=> path.into(),
       None=> {
-        let question=Question::input("Project name").default("my-app").build();
-        
-        prompt_one(question).unwrap().as_string().unwrap().into()
+        let question=Question::input("Project name")
+        .default("my-app")
+        .build();
+
+        prompt_one(question)
+        .unwrap()
+        .as_string()
+        .unwrap()
+        .into()
       }
     }
   }

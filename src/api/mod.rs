@@ -28,7 +28,9 @@ use crossterm::style::{
 
 
 pub fn confirm(msg: &str,default: bool)-> bool {
-  let q=Question::confirm(msg).default(default).build();
+  let q=Question::confirm(msg)
+  .default(default)
+  .build();
 
   match prompt_one(q) {
     Ok(res)=> res.as_bool().unwrap(),
@@ -41,7 +43,7 @@ pub async fn ensure_fresh_dir<P: AsRef<Path>>(path: P)-> io::Result<()> {
   let path=path.as_ref();
 
   // Checks whether there are any files at `path`.
-  if fs::read_dir(path).await?.next_entry().await?.is_none() {
+  if let None=fs::read_dir(path).await?.next_entry().await? {
     return Ok(());
   }
 
@@ -63,7 +65,9 @@ pub async fn ensure_fresh_dir<P: AsRef<Path>>(path: P)-> io::Result<()> {
 
 /// colors as string.
 fn rgb((name,r,g,b): (&str,u8,u8,u8))-> Str {
-  style(name).with(Color::Rgb { r,g,b }).to_string().into_boxed_str()
+  style(name).with(Color::Rgb { r,g,b })
+  .to_string()
+  .into_boxed_str()
 }
 
 pub fn ensure_template(template: Option<Str>)-> Str {
@@ -75,9 +79,12 @@ pub fn ensure_template(template: Option<Str>)-> Str {
   .choices(TEMPLATES.map(rgb))
   .build();
 
-  let prompt=prompt_one(q).unwrap().try_into_list_item().unwrap();
+  let prompt=prompt_one(q).unwrap()
+  .try_into_list_item().unwrap();
+
   // resetting a styled `String` is way too expensive.
-  TEMPLATES[prompt.index].0.to_lowercase().into_boxed_str()
+  TEMPLATES[prompt.index].0.to_lowercase()
+  .into_boxed_str()
 }
 
 pub fn ensure_lang<'a>(js: Option<bool>)-> &'a str {
@@ -91,7 +98,10 @@ pub fn ensure_lang<'a>(js: Option<bool>)-> &'a str {
     rgb(("JavaScript",0xff,0xff,0x0))
   ])
   .build();
-  let prompt=prompt_one(q).unwrap().try_into_list_item().unwrap();
+  let prompt=prompt_one(q)
+  .unwrap()
+  .try_into_list_item()
+  .unwrap();
 
   lang(prompt.index!=0)
 }
@@ -103,10 +113,6 @@ fn lang<'a>(js: bool)-> &'a str {
   }
 }
 
-
-pub fn url(template: &str,lang: &str)-> Str {
-  format!("https://github.com/proton-xd-templates/{template}-template-{lang}").into_boxed_str()
-}
 
 
 pub async fn clone_repo<P: AsRef<Path>>(url: &str,into: P)-> io::Result<()> {

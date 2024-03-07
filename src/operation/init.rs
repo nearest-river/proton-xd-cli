@@ -28,7 +28,7 @@ impl Operation for Init {
   async fn run(self)-> io::Result<()> {
     ensure_fresh_dir("./").await?;
 
-    let url=url(&ensure_template(self.template),ensure_lang(self.js));
+    let url=url!(&ensure_template(self.template)=> ensure_lang(self.js));
     clone_repo(&url,"./").await?;
 
 
