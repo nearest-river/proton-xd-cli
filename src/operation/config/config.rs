@@ -83,11 +83,7 @@ impl Config {
   }
 
   pub async fn save<P: AsRef<Path>>(self,path: P)-> io::Result<()> {
-    let mut w=Writer::new();
-    let mut serializer=serde_json::Serializer::pretty(&mut w);
-    self.serialize(&mut serializer)?;
-
-    fs::write(path,w.to_vec()).await
+    fs::write(path,serde_json::to_vec_pretty(&self)?).await
   }
 }
 

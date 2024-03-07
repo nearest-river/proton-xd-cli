@@ -11,8 +11,6 @@ use dev_options::*;
 use compiler_options::*;
 
 pub use config::*;
-
-use super::Writer;
 use std::path::Path;
 
 
