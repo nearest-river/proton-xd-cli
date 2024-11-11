@@ -63,7 +63,7 @@ pub async fn ensure_fresh_dir<P: AsRef<Path>>(path: P)-> io::Result<()> {
   }
 }
 
-/// colors as string.
+/// colors a string.
 fn rgb((name,r,g,b): (&str,u8,u8,u8))-> Str {
   style(name).with(Color::Rgb { r,g,b })
   .to_string()

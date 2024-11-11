@@ -20,4 +20,5 @@ serde_json = "1.0.108"
 clap-verbosity-flag = "2.1.0"
 tokio = { version = "1.35.0", features = ["fs", "rt", "process", "macros", "rt-multi-thread"] }
 serde = { version = "1.0.193", features = ["derive"] }
+denolib = { git = "https://kakashi-69-xd/denolib.git" }
 
